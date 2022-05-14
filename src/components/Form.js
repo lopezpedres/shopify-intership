@@ -1,11 +1,16 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ItemsContext } from "../context/ItemsContext";
-import { fetcher } from "../utils/fetcher";
+import { setItems, setPlacebo } from "../utils/itemsHandler";
 
 function Form() {
     const [text, setText] = useState("");
     const [error, setError] = useState(null);
     const { dispatch } = useContext(ItemsContext);
+
+    useEffect(() => {
+        console.log("Rendering Form...")
+    }, [])
+
 
     const handleChange = (e) => {
         setText(e.target.value);
@@ -17,19 +22,14 @@ function Form() {
             setError("Don't leave it empty");
         } else {
             try {
-                const data = await fetcher(text)
-                const newItem = {
-                    id: data.id,
-                    createdAt: new Date().toISOString(),
-                    prompt: text,
-                    model: data.model,
-                    object: data.object,
-                    output: data.choices[0].text,
-                }
-                dispatch({ type: "ADD_ITEM", payload: newItem });
+                setError(null);
+                console.log("Submitting...");
+                const response = await setPlacebo(text);
+                dispatch({ type: 'ADD_ITEM', payload: response })
                 setText("");
+
             } catch (e) {
-                setError("Ups! Something went wrong");
+                setTimeout(() => setError("Ups! Something went wrong"), 3000);
                 console.log(e)
             }
         }
@@ -43,17 +43,17 @@ function Form() {
                 onSubmit={ handleSubmit }
             >
                 <div>
-                    <label className="block text-white text-lg font-rubik font-bold m-2 " htmlFor="name">
+                    <label className="block text-white text-2xl font-rubik m-4 text-center lg:text-left" htmlFor="name">
                         Enter Prompt
                     </label>
                     <textarea
                         onChange={ handleChange }
                         value={ text }
-                        className="block bg-gray-700 bg-opacity-25 w-full h-64 p-4  text-white rounded-sm"
+                        className=" bg-gray-700 bg-opacity-25 w-full h-64 p-4 mb-4 text-lg md:text-xl font-bold  text-white rounded-md"
                     />
                 </div>
                 { error && <div className="text-white text-md font-rubik font-bold m-2">{ error }</div> }
-                <button>Submit</button>
+                <button className=" block rounded-md md:hover:text-xl m-auto lg:m-4  bg-gray-700 bg-opacity-25 text-white lg:text-2xl text-xl font-bold p-2">Submit</button>
             </form>
         </div>
     );
