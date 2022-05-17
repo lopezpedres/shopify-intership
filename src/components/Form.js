@@ -3,7 +3,8 @@ import { ItemsContext } from "../context/ItemsContext";
 import { setItems } from "../utils/itemsHandler";
 
 function Form({ setLoading }) {
-    const [text, setText] = useState("Create a short story about:");
+    const initialText = "Create a short story about:";
+    const [text, setText] = useState(initialText);
     const [error, setError] = useState(null);
     const { dispatch } = useContext(ItemsContext);
     const loadingRef = useRef(true);
@@ -34,7 +35,7 @@ function Form({ setLoading }) {
                 const prompt= text.trim()
                 const response = await setItems(prompt);
                 dispatch({ type: 'ADD_ITEM', payload: response })
-                setText("");
+                setText(initialText);
                 if (loadingRef.current) {
                     setLoading(false);
                 }
@@ -65,7 +66,7 @@ function Form({ setLoading }) {
                     />
                 </div>
                 { error && <div className="text-white text-md font-rubik font-bold m-2">{ error }</div> }
-                <button className=" block rounded-md md:hover:text-xl m-auto lg:m-4  bg-gray-700 bg-opacity-25 text-white lg:text-2xl text-xl font-bold p-2">Submit</button>
+                <button className=" block rounded-md  m-auto lg:m-4  bg-gray-700 bg-opacity-25 text-white lg:text-2xl text-xl font-bold p-2">Submit</button>
             </form>
         </div>
     );
