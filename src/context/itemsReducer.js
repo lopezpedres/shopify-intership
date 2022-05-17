@@ -5,7 +5,9 @@ const itemsReducer = (state, action) => {
         case 'ADD_ITEM':
             return [...state, action.payload];
         case 'REMOVE_ITEM':
-            return [...state, state.filter(item => item.id !== action.payload)];
+            return [...state.filter(item => item.id !== action.payload)];
+        case 'SET_ITEMS':
+            return [...state,...action.payload];
         default:
             return state
     }

@@ -1,13 +1,17 @@
+import { useState } from "react";
 import HeroHeader from "./components/HeroHeader";
+import InitialModal from "./components/InitialModal";
 import ItemsList from "./components/ItemList";
 
 function App() {
-return(
-  <div className="bg-gray-100 mx-auto container">
-  <HeroHeader/>
-  <ItemsList/>
-  </div>
-)
+  const [loading, setLoading] = useState(false);
+  return (
+    <div>
+      <InitialModal />
+      <HeroHeader setLoading={ setLoading } />
+      <ItemsList loading={ loading } />
+    </div>
+  )
 }
 
 export default App;
